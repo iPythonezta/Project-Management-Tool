@@ -1,0 +1,92 @@
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.navbar {
+    display: flex;
+    background-color: rgb(255, 199, 126);
+    padding: 5px;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.brand {
+    padding: 3px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin-right: 10px;
+    width: 30%;
+}
+
+.nav a {
+    text-decoration: none;
+    color: black;
+    padding: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+}
+
+.nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    margin-top: 5px;
+    right: 0;
+    background: black;
+    transition: width 0.3s ease;
+}
+
+.nav a:hover::after, .nav .active::after {
+    width: 100%;
+    left: 0;
+    background: black;
+}
+
+.login, .register {
+    padding: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    border-radius: 7px;
+    border: 0px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #f3ec78, #af4261);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.login, .register {
+    transition: background-color 0.3s ease;
+}
+
+.login:hover, .register:hover {
+    background: linear-gradient(45deg, #f3ec78, #af4261);
+    background-size: 200% 200%;
+    animation: gradientAnimation 3s ease infinite;
+    font-weight: bold;
+}
+
+.login {
+    margin-right: -20px;
+}
