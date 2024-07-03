@@ -1,9 +1,11 @@
 import React from "react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 export default function Login() {
     return (
         <div className="container">
             <Navbar active={'Login'} />
+            <h1 className='pg-heading'>Login</h1>
             <main>
                 <form className='form'>
                     <div className="form-content">
@@ -17,6 +19,7 @@ export default function Login() {
                     </div>
                 </form>
             </main>
+            <Footer />
         </div>
         
     )

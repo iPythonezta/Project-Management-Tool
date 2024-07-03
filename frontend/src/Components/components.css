@@ -80,7 +80,7 @@
     transition: background-color 0.3s ease;
 }
 
-.login:hover, .register:hover {
+.login:hover, .register:hover, .form-button:hover {
     background: linear-gradient(45deg, #f3ec78, #af4261);
     background-size: 200% 200%;
     animation: gradientAnimation 3s ease infinite;
@@ -89,4 +89,76 @@
 
 .login {
     margin-right: -20px;
+}
+
+/* Login Form */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 20px;
+    justify-content: center;
+    width: 50%;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 20px;
+    margin: -10px 10px;
+    z-index: 1000;
+    background-color: white;
+}
+
+.form-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+    height: 25px;
+}
+
+.form-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #f3ec78, #af4261);
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.pg-heading {
+    font-size: 40px;
+    margin-top: 50px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.invalid, .invalid:focus {
+    border : 1px solid red !important;
+}
+
+.valid, .valid:focus {
+    border : 1px solid green !important;
+}
+
+/* Footer */
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    background-color: rgb(255, 199, 126);
+    width: 100%;
 }
