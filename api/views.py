@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .serializers import UserSerializer
 from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password
+
 # Create your views here.
 
 @api_view(['POST'])
@@ -24,6 +26,7 @@ class UserRegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
+            serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
