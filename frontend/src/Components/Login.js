@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AlreadyLoggedin from "./AlreadyLoggedin";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useProjectContext } from "../Context/ProjectContext";
@@ -82,16 +83,7 @@ export default function Login() {
     }
 
     if (login) {
-        return (
-            <div className="container">
-                <Navbar />
-                <div className="login-info-container">
-                    <h2 className="pg-heading">You are already logged in!</h2>
-                    <p className="hd-desc">Click <Link to='/'>here</Link> to go to the home page</p>
-                </div>
-                <Footer />
-            </div>
-        )
+        return <AlreadyLoggedin />
     }
     return (
         <div className="container">

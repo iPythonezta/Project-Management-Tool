@@ -1,8 +1,10 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AlreadyLoggedin from "./AlreadyLoggedin";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useProjectContext } from "../Context/ProjectContext";
 
 export default function Registeration() {
     const [firstName, setFirstName] = React.useState('');
@@ -20,6 +22,7 @@ export default function Registeration() {
     const [errorMsg, setErrorMsg] = React.useState('');
 
     const navigate = useNavigate();
+    const {login} = useProjectContext();
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
@@ -107,8 +110,13 @@ export default function Registeration() {
             })
             .catch((error) => {
                 console.error(error);
+                setErrorMsg(error.response.data.email.length > 0 ?  'A user with this email already exists':null);
             })
         }
+    }
+
+    if (login) {
+        return <AlreadyLoggedin />
     }
 
     return (

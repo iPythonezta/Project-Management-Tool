@@ -1,6 +1,7 @@
 import './App.css';
 import Login from './Components/Login';
 import Registeration from './Components/Registeration';
+import Home from './Components/Home';
 import {BrowserRouter, Routes, Route, json} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import { useProjectContext } from './Context/ProjectContext';
@@ -16,6 +17,7 @@ function App() {
       }
     })
     .then((response) => {
+      console.log(response.data);
       setUser(response.data);
       setLogin(true);
       setToken(token);
@@ -30,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/registeration' element={<Registeration />} />
       </Routes>
