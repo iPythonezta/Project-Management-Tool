@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Registeration() {
     const [firstName, setFirstName] = React.useState('');
@@ -136,6 +136,7 @@ export default function Registeration() {
                         <button onClick={handleRegisteration} className="form-button">Register</button>
                     </div>
                 </form>
+                <p className="form-footer">Already have an account? <Link to='/login'>Login</Link> instead.</p>
             </main>
             <Footer />
         </div>

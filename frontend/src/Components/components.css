@@ -177,8 +177,8 @@
 
 .error-msg {
     margin-top: -30px;
-    display: inline-block;
     color: red;
+    display: inline-block;
 }
 
 .error-msg-muted {
@@ -187,3 +187,38 @@
     text-align: center;
 }
 
+.form-footer {
+    text-align: center;
+}
+
+.form-footer a, .hd-desc a {
+    color: rgb(0, 121, 251);
+    font-weight: bold;
+}
+
+.form-footer a:hover, .hd-desc a:hover {
+    color: rgb(0, 71, 147);
+}
+
+.error-msg-login {
+    margin-top: 20px;
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hd-desc {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.login-info-container {
+    height: 70vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
