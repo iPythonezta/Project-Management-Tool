@@ -27,3 +27,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     def __str__(self):
         return self.email
+
+class Projects(models.Model):
+    manager = models.ForeignKey(CustomUser, on_delete=models.CASCADE, to_field='email')
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    status = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.title

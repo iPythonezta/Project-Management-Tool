@@ -2,11 +2,12 @@ from django.shortcuts import render
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ProjectsSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
+from .models import Projects
 
 # Create your views here.
 
@@ -41,3 +42,43 @@ def get_user(request):
     user = request.user
     serializer = UserSerializer(user)
     return Response(serializer.data)
+
+class ProjectsListCreateView(generics.ListCreateAPIView):
+    serializer_class = ProjectsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Projects.objects.filter(manager=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['manager'] = request.user.email
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ProjectDeleteUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProjectsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Projects.objects.filter(manager=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        data = request.data.copy()
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.manager == request.user:
+            self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
