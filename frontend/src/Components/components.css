@@ -240,3 +240,60 @@
 .button-container > * {
     margin: 10px;
 }
+
+/* Home Page */
+
+.home-heading {
+    font-size: 35px;
+    margin: 50px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.card {
+    display: flex;
+    width: 45%;
+}
+
+.card > * {
+    border: 1px solid black;
+}
+
+.left-side {
+    display: flex;
+    width: 33%;
+    height: 300px;
+    border-radius: 10px 0px 0px 10px;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-side {
+    display: flex;
+    width: 67%;
+    height: 300px;
+    border-radius: 0px 10px 10px 0px;
+    justify-content: center;
+    align-items: center;
+    background-color: #FADCB6;
+}
+
+.card-icon {
+    height: 100px;
+    width: 100px;
+}
+
+.card-heading {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0px;
+}
