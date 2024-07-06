@@ -41,7 +41,7 @@ export default function Navbar({ active }) {
             <nav className='nav'>
                 <Link to={'/'} className={active==='Home'?'active':''}>Home</Link>
                 <Link to='/projects' className={active==='Projects'?'active':''}>Projects</Link>
-                <Link to='/users' className={active==='Users'?'active':''}>Users</Link>
+                <Link to='/tasks' className={active==='Tasks'?'active':''}>Tasks</Link>
                 {!login &&
                     (
                         <>

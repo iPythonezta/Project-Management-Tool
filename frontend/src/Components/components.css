@@ -68,7 +68,7 @@
     background: black;
 }
 
-.login, .register {
+.login, .register, .branded-button {
     padding: 15px;
     font-size: 15px;
     font-weight: bold;
@@ -81,11 +81,11 @@
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.login, .register {
+.login, .register, .branded-button {
     transition: background-color 0.3s ease;
 }
 
-.login:hover, .register:hover, .form-button:hover {
+.login:hover, .register:hover, .form-button:hover, .branded-button:hover {
     background: linear-gradient(45deg, #f3ec78, #af4261);
     background-size: 200% 200%;
     animation: gradientAnimation 3s ease infinite;
@@ -172,6 +172,12 @@
     text-align: center;
     background-color: rgb(255, 199, 126);
     width: 100%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.copyright {
+    font-size: 20px;
+    font-weight: 500;
 }
 
 /* Registeration */
@@ -260,6 +266,14 @@
 .card {
     display: flex;
     width: 45%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.5s;
+    cursor: pointer;
 }
 
 .card > * {
@@ -296,4 +310,29 @@
     font-size: 30px;
     font-weight: 600;
     margin: 0px;
+}
+
+.card-desc {
+    font-size: 22px;
+    color: #545454;
+    margin: 20px;
+    text-align: center;
+}
+
+.card-button {
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 15px;
+    background: #BABABA;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.8;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-button:hover {
+    background-color: #bababa;
+    opacity: 1;
 }

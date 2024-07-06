@@ -2,10 +2,12 @@ import './App.css';
 import Login from './Components/Login';
 import Registeration from './Components/Registeration';
 import Home from './Components/Home';
+import Projects from './Components/Projects';
 import {BrowserRouter, Routes, Route, json} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import { useProjectContext } from './Context/ProjectContext';
 import axios from 'axios';
+import Tasks from './Components/Tasks';
 
 function App() {
   const {setUser, setLogin, setToken} = useProjectContext();
@@ -35,6 +37,8 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/registeration' element={<Registeration />} />
+        <Route path='/projects' element={<Projects />} />
+        <Route path='/tasks' element={<Tasks />} />
       </Routes>
     </BrowserRouter>
   );
