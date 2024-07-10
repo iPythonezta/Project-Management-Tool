@@ -1,11 +1,58 @@
 import React, {useState} from "react";
 import { IoMdClose } from "react-icons/io";
-export default function ProjectModal({setShow}) {
+import axios from "axios";
+import { useProjectContext } from "../Context/ProjectContext";
+export default function ProjectModal({setShow, fetcher}) {
     const [projectTitle, setProjectTitle] = useState('');
     const [projectDescription, setProjectDescription] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [status, setStatus] = useState('In Progress');
+    const [conditionalCSS, setConditionalCSS] = useState({
+        statusColor:'#BA6A02',
+    });
+
+    const {token} = useProjectContext();
+
+    const handleChangeColor = (e) => {
+        setStatus(e.target.value);
+        if (e.target.value === 'Completed') {
+            setConditionalCSS({statusColor: '#01A41B'});
+        }
+        else if (e.target.value === 'In Progress') {
+            setConditionalCSS({statusColor: '#BA6A02'});
+        }
+        else {
+            setConditionalCSS({statusColor: 'black'});
+        }
+    }
+
+    const handleAddProject = (e) => {
+        e.preventDefault();
+        const project = {
+            title: projectTitle,
+            description: projectDescription,
+            start_date: startDate,
+            end_date: endDate,
+            status: status
+        }
+        console.log(project)
+
+        axios.post('http://127.0.0.1:8000/api/projects/',project, {
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+        })
+        .then((response) => {
+            console.log(response.data);
+            fetcher();
+            setShow(false);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    }
+        
     return (
         <div className="proj-modal">
             <div className="proj-modal-header">
@@ -26,7 +73,7 @@ export default function ProjectModal({setShow}) {
                         <label className="form-label" htmlFor="end-date">End Date</label>
                         <input className="form-input" type="date" id="end-date" value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
                         <label className="form-label" htmlFor="status">Status</label>
-                        <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                        <select id="status" value={status} style={{color: conditionalCSS?.statusColor}} onChange={(e) => {handleChangeColor(e);setStatus(e.target.value)}}>
                             <option value="In Progress">In Progress</option>
                             <option value="Completed">Completed</option>
                         </select>
@@ -34,7 +81,7 @@ export default function ProjectModal({setShow}) {
                 </form>
             </div>
             <div className="proj-modal-footer">
-                <button className="add-button">Add Project</button>
+                <button className="add-button" onClick={handleAddProject}>Add Project</button>
             </div>
         </div>
     )

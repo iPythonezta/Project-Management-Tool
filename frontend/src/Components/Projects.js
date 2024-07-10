@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useProjectContext } from "../Context/ProjectContext";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ProjectModal from "./ProjectModal";
+import axios from "axios";
 export default function Projects() {
     const [show, setShow] = React.useState(false);
+    const [projects, setProjects] = React.useState([]);
+    const {token} = useProjectContext();
+    
+    const handleFetchProjects = () =>{
+
+        const headers = {
+            Authorization: `Token ${token}`,
+        };
+
+        axios.get('http://127.0.0.1:8000/api/projects/',{
+            headers: {
+                Authorization: `Token ${token}`
+            },
+        })
+        .then(res => {
+            setProjects(res.data);
+            console.log(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+    
+    useEffect(() => {
+        handleFetchProjects();
+    }, [])
+
     return (
         <div>
             <Navbar active={'Projects'} />
@@ -15,7 +43,7 @@ export default function Projects() {
                 <button className="gray-button" onClick={() => setShow(true)}>Add Project</button>
             </div>
             <div className={show===true?'modal-container show':'modal-container hide'}>
-                <ProjectModal setShow={setShow}/>
+                <ProjectModal setShow={setShow} fetcher={handleFetchProjects}/>
             </div>
             <table className="proj-table" border={1}>
                 <thead>
@@ -23,22 +51,24 @@ export default function Projects() {
                         <th colSpan={1}>ID</th>
                         <th colSpan={2}>Project Title</th>
                         <th colSpan={3}>Project Description</th>
-                        <th colSpan={1.5}>Start Date</th>
-                        <th colSpan={1.5}>End Date</th>
+                        <th colSpan={2}>Start Date</th>
+                        <th colSpan={2}>End Date</th>
                         <th colSpan={1.5}>Created At</th>
                         <th colSpan={1.5}>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colSpan={1}>1</td>
-                        <td colSpan={2}>Testing Project Styling</td>
-                        <td colSpan={3}>Styling the projects page....</td>
-                        <td colSpan={1.5}>07/07/2024</td>
-                        <td colSpan={1.5}>09/07/2024</td>
-                        <td colSpan={1.5}>06/07/2023</td>
-                        <td colSpan={1.5}>In Progress</td>
-                    </tr>
+                    {projects.map((project) => (
+                        <tr key={project.id}>
+                            <td colSpan={1}>{project.id}</td>
+                            <td colSpan={2}>{project.title}</td>
+                            <td colSpan={3}>{project.description}</td>
+                            <td colSpan={2}>{project.start_date}</td>
+                            <td colSpan={2}>{project.end_date}</td>
+                            <td colSpan={1.5}>{new Date(project.created_at).toDateString()}</td>
+                            <td colSpan={1.5} style={project.status === 'Completed' ? {color: '#01A41B'} : project.status === 'In Progress' ? {color: '#BA6A02'} : {}}>{project.status}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
             <Footer />
