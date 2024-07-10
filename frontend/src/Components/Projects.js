@@ -2,6 +2,7 @@ import React from "react";
 import { useProjectContext } from "../Context/ProjectContext";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import ProjectModal from "./ProjectModal";
 export default function Projects() {
     return (
         <div>
@@ -11,6 +12,9 @@ export default function Projects() {
             </h2>
             <div className="button-justifier">
                 <button className="gray-button">Add Project</button>
+            </div>
+            <div className="modal-container">
+                <ProjectModal /> {/* For testing I will make it triggerable with a button later */}
             </div>
             <table className="proj-table" border={1}>
                 <thead>
