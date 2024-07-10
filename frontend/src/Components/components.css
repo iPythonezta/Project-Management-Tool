@@ -336,3 +336,36 @@
     background-color: #bababa;
     opacity: 1;
 }
+
+.gray-button {
+    width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 35px;
+    background: #BABABA;
+    color: #000;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.gray-button:hover {
+    background-color: #9f9f9f;
+}
+
+.button-justifier {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 30px auto;
+}
+
+.proj-table {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    border-spacing: 10px;
+    background-color: #FADCB6;
+}
+ .proj-table th, .proj-table td {
+    padding: 10px;
+ }
