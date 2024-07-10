@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ProjectModal from "./ProjectModal";
 export default function Projects() {
+    const [show, setShow] = React.useState(false);
     return (
         <div>
             <Navbar active={'Projects'} />
@@ -11,10 +12,10 @@ export default function Projects() {
                 Projects
             </h2>
             <div className="button-justifier">
-                <button className="gray-button">Add Project</button>
+                <button className="gray-button" onClick={() => setShow(true)}>Add Project</button>
             </div>
-            <div className="modal-container">
-                <ProjectModal /> {/* For testing I will make it triggerable with a button later */}
+            <div className={show===true?'modal-container show':'modal-container hide'}>
+                <ProjectModal setShow={setShow}/>
             </div>
             <table className="proj-table" border={1}>
                 <thead>
