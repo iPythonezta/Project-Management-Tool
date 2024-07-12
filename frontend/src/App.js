@@ -8,6 +8,7 @@ import React, {useEffect, useState} from 'react';
 import { useProjectContext } from './Context/ProjectContext';
 import axios from 'axios';
 import Tasks from './Components/Tasks';
+import ProjectDetail from './Components/ProjectDetail';
 
 function App() {
   const {setUser, setLogin, setToken} = useProjectContext();
@@ -39,6 +40,7 @@ function App() {
         <Route path='/registeration' element={<Registeration />} />
         <Route path='/projects' element={<Projects />} />
         <Route path='/tasks' element={<Tasks />} />
+        <Route path='/project/:id' element={<ProjectDetail />} />
       </Routes>
     </BrowserRouter>
   );

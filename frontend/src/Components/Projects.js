@@ -4,17 +4,15 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ProjectModal from "./ProjectModal";
 import axios from "axios";
+import NotLoggedIn from "./NotLoggedIn";
+import { useNavigate } from "react-router-dom";
 export default function Projects() {
     const [show, setShow] = React.useState(false);
     const [projects, setProjects] = React.useState([]);
-    const {token} = useProjectContext();
+    const {token, login} = useProjectContext();
+    const navigate = useNavigate();
     
     const handleFetchProjects = () =>{
-
-        const headers = {
-            Authorization: `Token ${token}`,
-        };
-
         axios.get('http://127.0.0.1:8000/api/projects/',{
             headers: {
                 Authorization: `Token ${token}`
@@ -32,6 +30,10 @@ export default function Projects() {
     useEffect(() => {
         handleFetchProjects();
     }, [])
+
+    if (!login) {
+        return <NotLoggedIn />
+    }
 
     return (
         <div>
@@ -59,7 +61,7 @@ export default function Projects() {
                 </thead>
                 <tbody>
                     {projects.map((project) => (
-                        <tr key={project.id}>
+                        <tr key={project.id} onClick={() => navigate(`/project/${project.id}`)}>
                             <td colSpan={1}>{project.id}</td>
                             <td colSpan={2}>{project.title}</td>
                             <td colSpan={3}>{project.description}</td>

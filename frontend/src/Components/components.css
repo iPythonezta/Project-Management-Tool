@@ -399,6 +399,11 @@
     background-color: #FADCB6;
 }
 
+.proj-table tr:hover {
+    cursor: pointer;
+    background-color: #ffca84;
+}
+
 .proj-table th, .proj-table td {
     padding: 12px;
 }
@@ -548,4 +553,68 @@
 select > option {
     font-size: 20px;
     color: #393503;
+}
+
+/* Project Detail Page styling */
+
+.project-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px 50px;
+}
+
+.small-detail-heading {
+    text-align: left;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.project-info-container {
+    width: 100%;
+    min-height: 300px;
+    border: 1px solid black;
+    background-color: #FFC77E;
+    display: flex;
+}
+
+.project-info {
+    width: 60%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-title {
+    font-size: 30px;
+    margin-top: 10px;
+    margin-left: 15px;
+    flex: 0.3;
+}
+
+.project-description {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
+    text-align: left;
+    color: #000;
+    flex: 0.5;
+}
+
+.proj-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid black;
+    flex: 0.2;
+    padding: 5px;
+    background-color: #CD8D6B;
+}
+
+.status-container {
+    background-color: #F5BA6F;
+    height: 100%;
+    min-height: 300px;
+    width: 40%;
 }
