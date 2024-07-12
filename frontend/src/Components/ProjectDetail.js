@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { GoPencil } from "react-icons/go";
+import ProjectModal from "./ProjectModal";
 
 export default function ProjectDetail() {
     let {id} = useParams();
@@ -14,6 +15,7 @@ export default function ProjectDetail() {
     const [project, setProject] = React.useState({});
     const navigate = useNavigate();
     const [percent, setPercent] = React.useState(80); {/* Will be calculated dynamically later when I implement tasks */}
+    const [show, setShow] = React.useState(false);
 
     const fetchProjectData = async() => {
         await axios.get(`http://127.0.0.1:8000/api/projects/${id}/`, {
@@ -52,16 +54,30 @@ export default function ProjectDetail() {
     useEffect(() => {
         fetchProjectData();
     }, [token])
+    
 
     return(
-        <div>
+        <div className="project-details-container">
             <Navbar active="Projects" />
+            <div className={show===true?'modal-container show':'modal-container hide'}>
+                <ProjectModal 
+                    setShow={setShow} 
+                    fetcher={fetchProjectData} 
+                    title={project.title} 
+                    description={project.description} 
+                    start={project.start_date} 
+                    end={project.end_date}
+                    status_={project.status}
+                    edit={true}
+                    id={project.id}
+                />
+            </div>
             <main>
                 <h2 className="pg-heading">{project.title}</h2>
                 <div className="project-container">
                     <div className="small-container">
                         <p className="small-detail-heading">Details</p>
-                        <div className="edit-button-container">
+                        <div className="edit-button-container" onClick={() => setShow(true)}>
                             <GoPencil />
                         </div>
                     </div>
@@ -82,8 +98,8 @@ export default function ProjectDetail() {
                                 <CircularProgressbar value={percent} text={`${percent}%`} styles={buildStyles({pathColor: getDynamicColor()})} />
                             </div>
                             <div className="status-text-container">
-                                <p className="status-info">6/10 Tasks Completed</p>
-                                <p className="status-text">In Progress</p>
+                                <h5 className="status-info">6/10 Tasks Completed</h5>
+                                <h5 className="status-text">{project.status}</h5>
                             </div>
                         </div>
                     </div>

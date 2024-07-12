@@ -1,18 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { IoMdClose } from "react-icons/io";
 import axios from "axios";
 import { useProjectContext } from "../Context/ProjectContext";
-export default function ProjectModal({setShow, fetcher}) {
+export default function ProjectModal({setShow, fetcher, title, description, start, end, status_, id, edit}) {
     const [projectTitle, setProjectTitle] = useState('');
     const [projectDescription, setProjectDescription] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [status, setStatus] = useState('In Progress');
+    const [status, setStatus] = useState('');
+    const [lengthError, setLengthError] = useState(false);
     const [conditionalCSS, setConditionalCSS] = useState({
         statusColor:'#BA6A02',
     });
 
     const {token} = useProjectContext();
+
+    const handleProjectDescription = (e) => {
+        setProjectDescription(e.target.value);
+        if (e.target.value.length > 400) {
+            setLengthError(true);
+        }
+        else {
+            setLengthError(false);
+        }
+    }
 
     const handleChangeColor = (e) => {
         setStatus(e.target.value);
@@ -52,6 +63,39 @@ export default function ProjectModal({setShow, fetcher}) {
             console.error(error);
         })
     }
+
+    const handleEditProject = (e) => {
+        e.preventDefault();
+        const project = {
+            title: projectTitle,
+            description: projectDescription,
+            start_date: startDate,
+            end_date: endDate,
+            status: status
+        }
+        console.log(project)
+        axios.put(`http://127.0.0.1:8000/api/projects/${id}/`,project, {
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+        })
+        .then((response) => {
+            console.log(response.data);
+            fetcher();
+            setShow(false);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    }
+
+    useEffect(() => {
+        setProjectTitle(title);
+        setProjectDescription(description);
+        setStartDate(start);
+        setEndDate(end);
+        setStatus(status_);
+    }, [title, description, start, end, status_])
         
     return (
         <div className="proj-modal">
@@ -67,7 +111,8 @@ export default function ProjectModal({setShow, fetcher}) {
                         <label className="form-label" htmlFor="project-title">Project Title</label>
                         <input className="form-input" type="text" id="project-title" value={projectTitle} onChange={(e) => setProjectTitle(e.target.value)} />
                         <label className="form-label" htmlFor="project-description">Project Description</label>
-                        <textarea className="form-input" id="project-description" value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)}></textarea>
+                        <textarea className="form-input" id="project-description" value={projectDescription} onChange={handleProjectDescription}></textarea>
+                        <p className="error-msg modal-error">{lengthError && 'Project Description cannot be longer than 400 characterss'}</p>
                         <label className="form-label" htmlFor="start-date">Start Date</label>
                         <input className="form-input" type="date" id="start-date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                         <label className="form-label" htmlFor="end-date">End Date</label>
@@ -81,8 +126,19 @@ export default function ProjectModal({setShow, fetcher}) {
                 </form>
             </div>
             <div className="proj-modal-footer">
-                <button className="add-button" onClick={handleAddProject}>Add Project</button>
+                {!edit &&<button className="add-button" onClick={handleAddProject}>Add Project</button>}
+                {edit &&<button className="add-button" onClick={handleEditProject}>Edit Project</button>}
             </div>
         </div>
     )
+}
+
+ProjectModal.defaultProps = {
+    title: '',
+    description: '',
+    start: '',
+    end: '',
+    status_: 'In Progress',
+    id:1,
+    edit:false,
 }

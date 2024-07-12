@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Odor+Mean+Chey&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @keyframes gradientAnimation {
     0% {
         background-position: 0% 50%;
@@ -32,6 +32,14 @@
         opacity: 0;
         transform: translateX(-50px);
     }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
@@ -555,6 +563,13 @@ select > option {
     color: #393503;
 }
 
+.modal-error {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 25px;
+    font-family: 'Roboto', sans-serif;
+}
+
 /* Project Detail Page styling */
 
 .project-container {
@@ -574,6 +589,7 @@ select > option {
 .project-info-container {
     width: 100%;
     min-height: 300px;
+    max-height: 300px;
     border: 1px solid black;
     background-color: #FFC77E;
     display: flex;
@@ -594,7 +610,7 @@ select > option {
 
 .project-description {
     font-size: 20px;
-    margin-top: 10px;
+    margin-top: -15px;
     margin-left: 15px;
     margin-right: 15px;
     text-align: left;
@@ -615,11 +631,12 @@ select > option {
     background-color: #F5BA6F;
     height: 100%;
     min-height: 300px;
+    max-height: 300px;
     width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-left: 1px solid black
+    border: 1px solid black
 }
 
 .status-hd {
