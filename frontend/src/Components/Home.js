@@ -13,9 +13,9 @@ export default function Home() {
     }
     
     return (
-        <div className="container">
+        <div className="page-container">
             <Navbar active={'Home'} />
-            <div className="home-container">
+            <div className="home-container container">
                 <header>
                     <h3 className="home-heading">
                         Your All-in-One Project Management Tool for Seamless Collaboration and Success

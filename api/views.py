@@ -4,10 +4,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import UserSerializer, ProjectsSerializer
+from .serializers import UserSerializer, ProjectsSerializer, TasksSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
-from .models import Projects
+from .models import Projects, Tasks
 
 # Create your views here.
 
@@ -82,3 +82,19 @@ class ProjectDeleteUpdateView(generics.RetrieveUpdateDestroyAPIView):
             self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+class TasksListCreateView(generics.ListCreateAPIView):
+    serializer_class = TasksSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.request.query_params.get('project_id')
+        if project_id:
+            return Tasks.objects.filter(project=project_id)
+        else:
+            return []
+class TasksUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TasksSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Tasks.objects.filter(project__manager=self.request.user)

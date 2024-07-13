@@ -42,6 +42,16 @@ body {
     flex-direction: column;
 }
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh
+}
+
+.container {
+    flex-grow: 1;
+}
+
 .navbar {
     display: flex;
     background-color: rgb(255, 199, 126);
@@ -205,8 +215,9 @@ body {
 /* Footer */
 
 .footer {
-    position: fixed;
-    bottom: 0;
+    /* position: fixed;
+    bottom: 0; */
+    padding: 10px 0;
     text-align: center;
     background-color: rgb(255, 199, 126);
     width: 100%;
@@ -588,8 +599,8 @@ select > option {
 
 .project-info-container {
     width: 100%;
-    min-height: 300px;
-    max-height: 300px;
+    /* min-height: 300px;
+    max-height: 300px; */
     border: 1px solid black;
     background-color: #FFC77E;
     display: flex;
@@ -642,6 +653,16 @@ select > option {
 .status-hd {
     font-size: 30px;
     text-align: center;
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.proj-hd {
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 15px;
 }
 
 .circular-progress-bar {

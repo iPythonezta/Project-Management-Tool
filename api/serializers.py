@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import CustomUser, Projects
+from .models import CustomUser, Projects, Tasks
 
 class UserSerializer(ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -19,3 +19,9 @@ class ProjectsSerializer(serializers.ModelSerializer):
         manager = CustomUser.objects.get(email=manager_email)
         project = Projects.objects.create(manager=manager, **validated_data)
         return project
+    
+class TasksSerializer(serializers.ModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all())
+    class Meta:
+        model = Tasks
+        fields = '__all__'

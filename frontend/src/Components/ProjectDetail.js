@@ -57,7 +57,7 @@ export default function ProjectDetail() {
     
 
     return(
-        <div className="project-details-container">
+        <div className="project-details-container page-container">
             <Navbar active="Projects" />
             <div className={show===true?'modal-container show':'modal-container hide'}>
                 <ProjectModal 
@@ -72,7 +72,7 @@ export default function ProjectDetail() {
                     id={project.id}
                 />
             </div>
-            <main>
+            <main className="container">
                 <h2 className="pg-heading">{project.title}</h2>
                 <div className="project-container">
                     <div className="small-container">
@@ -83,7 +83,7 @@ export default function ProjectDetail() {
                     </div>
                     <div className="project-info-container">
                         <div className="project-info">
-                            <h3 className="project-title">{project.title}</h3>
+                            <h3 className="project-title proj-hd">{project.title}</h3>
                             <p className="project-description">{project.description}</p>
                             <div className="proj-footer">
                                 <p><strong>Started At: </strong>{project.start_date}</p>
