@@ -8,6 +8,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { GoPencil } from "react-icons/go";
 import ProjectModal from "./ProjectModal";
+import TaskModal from "./TasksModal";
 
 export default function ProjectDetail() {
     let {id} = useParams();
@@ -16,6 +17,7 @@ export default function ProjectDetail() {
     const [percent, setPercent] = React.useState(80); {/* Will be calculated dynamically later when I implement tasks */}
     const [show, setShow] = React.useState(false);
     const [tasks, setTasks] = React.useState([]);
+    const [taskShow, setTaskShow] = React.useState(false);
     const navigate = useNavigate();
 
     const fetchProjectData = async() => {
@@ -43,6 +45,28 @@ export default function ProjectDetail() {
             setTasks(response.data)
             console.log(response.data)
         })
+        .catch((error) => {
+            console.error(error);
+        })
+    }
+
+    const getClassName = (status) => {
+        if (status === 'In Progress') {
+            console.log('progress');
+            return 'progress';
+        } 
+        else if (status === 'Completed') {
+            return 'completed';
+        } 
+        else if (status === 'Delayed') {
+            return 'delayed';
+        }
+        else if (status === 'Cancelled') {
+            return 'cancelled';
+        }
+        else {
+            return '';
+        }
     }
 
     const getDynamicColor = () => {
@@ -68,7 +92,17 @@ export default function ProjectDetail() {
         fetchProjectData();
         fetchTasks();
     }, [token])
-    
+
+    useEffect(() => {
+       if (show || taskShow){
+            document.scrollingElement.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+        }
+       else {
+           document.body.style.overflow = 'auto';
+       }
+    })
+
 
     return(
         <div className="project-details-container page-container">
@@ -121,7 +155,7 @@ export default function ProjectDetail() {
                 <h2 className="pg-heading">Project Tasks</h2>
                 <div className="task-container">
                     <div className="btn-container">
-                        <button className="task-btn gray-button">Add Task</button>
+                        <button className="task-btn gray-button" onClick={()=>setTaskShow(true)}>Add Task</button>
                     </div>
                     <div className="task-table-container">
                         <table className="task-table">
@@ -136,44 +170,28 @@ export default function ProjectDetail() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="progress">
-                                    <td colSpan={1}>1</td>
-                                    <td colSpan={2}>Interface designing</td>
-                                    <td colSpan={3}>Design the UI of the project. Use tools like Figma to create a good looking design for the project.</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={3}>In Progress</td>
-                                </tr>
-                                <tr className="completed">
-                                    <td colSpan={1}>2</td>
-                                    <td colSpan={2}>Backend API</td>
-                                    <td colSpan={3}>Develop the backend api for the projects CRUD</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={3}>Completed</td>
-                                </tr>
-                                <tr className="delayed">
-                                    <td colSpan={1}>3</td>
-                                    <td colSpan={2}>Testing</td>
-                                    <td colSpan={3}>Testing the overall functionality of the project</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={3}>Delayed</td>
-                                </tr>
-                                <tr className="cancelled">
-                                    <td colSpan={1}>4</td>
-                                    <td colSpan={2}>Deploying</td>
-                                    <td colSpan={3}>Deploy the project on Azure</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={2}>01/01/2024</td>
-                                    <td colSpan={3}>Cancelled</td>
-                                </tr>
+                                {
+                                    tasks.map((task) => (
+                                        <tr key={task.id} className={getClassName(task.status)}>
+                                            <td colSpan={1}>{task.id}</td>
+                                            <td colSpan={2}>{task.title}</td>
+                                            <td colSpan={3}>{task.description}</td>
+                                            <td colSpan={2}>{task.start_date}</td>
+                                            <td colSpan={2}>{task.end_date}</td>
+                                            <td colSpan={2}>{task.status}</td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
 
             </main>
+            <div className={taskShow===true?'modal-container show':'modal-container hide'}>
+                <TaskModal setShow={setTaskShow} fetcher={fetchTasks} projectId={id}/>
+            </div>
+            
             <Footer />
         </div>
     )

@@ -457,32 +457,32 @@ body {
     transition: opacity 0.1, visibility 0.1s;
 }
 
-.proj-modal {
+.proj-modal, .task-modal {
     width: 50%;
     margin: 20px auto;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 15px 15px;
 }
 
-.proj-modal-header {
+.proj-modal-header, .task-modal-header {
     background-color: rgb(255, 199, 126);
     border: 1px solid black;
     border-radius: 25px 25px 0 0;
 }
 
-.proj-modal-header h2 {
+.proj-modal-header h2, .task-modal-header h2 {
     width: 100%;
     display: inline-block;
     text-align: center;
     margin-top: -30px;
 }
 
-.proj-modal-body {
+.proj-modal-body, .task-modal-body {
     border: 1px solid black;
     height: 500px;
     overflow-y: scroll;
 }
 
-.proj-modal-footer {
+.proj-modal-footer, .task-modal-footer {
     border: 1px solid black;
     background-color: rgb(255, 199, 126);
     height: 60px;
@@ -507,7 +507,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.20);
 }
 
-.proj-modal-body {
+.proj-modal-body, .task-modal-body {
     background-color: white;
 }
 
@@ -538,27 +538,27 @@ body {
     animation: slideOut 0.5s;
 }
 
-.proj-content input, .proj-content, .proj-content textarea {
+.proj-content input, .proj-content, .proj-content textarea, .task-content input, .task-content, .task-content textarea {
     width: 90%;
     margin: 10px auto;
 }
 
-.proj-content{
+.proj-content, .task-content{
     justify-content: center;
     font-family: "Odor Mean Chey", serif;
     font-weight: 400;
     font-style: normal;
 }
 
-.proj-form {
+.proj-form, .task-form {
     width: 100%;
 }
 
-.proj-content label {
+.proj-content label, .task-form label {
     margin: 10px 30px -20px;
 }
 
-.proj-content select {
+.proj-content select, .task-content select {
     width: 92%;
     margin: 10px auto;
     height: 45px;
@@ -768,9 +768,14 @@ select > option {
 }
 
 .task-table tr.delayed td {
-    background-color: rgb(128, 94, 128);
+    background-color: #805e80;
 }
 
 .task-table tr.cancelled td {
     background-color: #AF4261;
+    text-decoration: line-through;
+}
+
+#status {
+    -webkit-text-stroke: #000 0.5px;
 }
