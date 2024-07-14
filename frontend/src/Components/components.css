@@ -711,3 +711,66 @@ select > option {
     cursor: pointer;
     color: rgb(216, 104, 43);
 }
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+.task-table-container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.task-table {
+    width: 95%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.task-table tr td, .task-table tr th {
+    border: 2px solid black;
+    padding: 20px;
+    font-size: 17px;
+    background-color: #f9ce95;
+}
+
+.task-table tr {
+    opacity: 0.9;
+}
+
+.task-table tr:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.task-table tr:hover {
+    opacity: 1;
+}
+
+.task-table tr th {
+    border: 2px solid black;
+    font-size: 20px;
+}
+
+.task-table tr.progress td {
+    background-color: #F3EC78;
+}
+
+.task-table tr.completed td {
+    background-color: palegreen;
+}
+
+.task-table tr.delayed td {
+    background-color: rgb(128, 94, 128);
+}
+
+.task-table tr.cancelled td {
+    background-color: #AF4261;
+}

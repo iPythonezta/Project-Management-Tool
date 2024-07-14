@@ -13,9 +13,10 @@ export default function ProjectDetail() {
     let {id} = useParams();
     const {token} = useProjectContext();
     const [project, setProject] = React.useState({});
-    const navigate = useNavigate();
     const [percent, setPercent] = React.useState(80); {/* Will be calculated dynamically later when I implement tasks */}
     const [show, setShow] = React.useState(false);
+    const [tasks, setTasks] = React.useState([]);
+    const navigate = useNavigate();
 
     const fetchProjectData = async() => {
         await axios.get(`http://127.0.0.1:8000/api/projects/${id}/`, {
@@ -29,6 +30,18 @@ export default function ProjectDetail() {
         })
         .catch(err => {
             console.log(err);
+        })
+    }
+
+    const fetchTasks = async () => {
+        await axios.get(`http://127.0.0.1:8000/api/tasks/?project_id=${id}`, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        })
+        .then((response)=>{ 
+            setTasks(response.data)
+            console.log(response.data)
         })
     }
 
@@ -53,6 +66,7 @@ export default function ProjectDetail() {
 
     useEffect(() => {
         fetchProjectData();
+        fetchTasks();
     }, [token])
     
 
@@ -104,6 +118,61 @@ export default function ProjectDetail() {
                         </div>
                     </div>
                 </div>
+                <h2 className="pg-heading">Project Tasks</h2>
+                <div className="task-container">
+                    <div className="btn-container">
+                        <button className="task-btn gray-button">Add Task</button>
+                    </div>
+                    <div className="task-table-container">
+                        <table className="task-table">
+                            <thead>
+                                <tr>
+                                    <th colSpan={1}>ID</th>
+                                    <th colSpan={2}>Task Title</th>
+                                    <th colSpan={3}>Task Description</th>
+                                    <th colSpan={2}>Start Date</th>
+                                    <th colSpan={2}>End Date</th>
+                                    <th colSpan={2}>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className="progress">
+                                    <td colSpan={1}>1</td>
+                                    <td colSpan={2}>Interface designing</td>
+                                    <td colSpan={3}>Design the UI of the project. Use tools like Figma to create a good looking design for the project.</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={3}>In Progress</td>
+                                </tr>
+                                <tr className="completed">
+                                    <td colSpan={1}>2</td>
+                                    <td colSpan={2}>Backend API</td>
+                                    <td colSpan={3}>Develop the backend api for the projects CRUD</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={3}>Completed</td>
+                                </tr>
+                                <tr className="delayed">
+                                    <td colSpan={1}>3</td>
+                                    <td colSpan={2}>Testing</td>
+                                    <td colSpan={3}>Testing the overall functionality of the project</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={3}>Delayed</td>
+                                </tr>
+                                <tr className="cancelled">
+                                    <td colSpan={1}>4</td>
+                                    <td colSpan={2}>Deploying</td>
+                                    <td colSpan={3}>Deploy the project on Azure</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={2}>01/01/2024</td>
+                                    <td colSpan={3}>Cancelled</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </main>
             <Footer />
         </div>
