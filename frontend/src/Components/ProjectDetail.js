@@ -9,15 +9,17 @@ import 'react-circular-progressbar/dist/styles.css';
 import { GoPencil } from "react-icons/go";
 import ProjectModal from "./ProjectModal";
 import TaskModal from "./TasksModal";
-
+import { MdDeleteOutline } from "react-icons/md";
+import DeleteModal from "./DeleteModal";
 export default function ProjectDetail() {
     let {id} = useParams();
     const {token} = useProjectContext();
     const [project, setProject] = React.useState({});
-    const [percent, setPercent] = React.useState(80); {/* Will be calculated dynamically later when I implement tasks */}
+    const [percent, setPercent] = React.useState(0);
     const [show, setShow] = React.useState(false);
     const [tasks, setTasks] = React.useState([]);
     const [taskShow, setTaskShow] = React.useState(false);
+    const [deleteShow, setDeleteShow] = React.useState(false);
     const navigate = useNavigate();
 
     const fetchProjectData = async() => {
@@ -88,19 +90,46 @@ export default function ProjectDetail() {
 
     }
 
+    const hanldeClickOutside = (e) => {
+        if (e.target === e.currentTarget) {
+          setShow(false);
+          setTaskShow(false);
+        }
+    };
+
+    const calculateProgress = () => {
+        const totalWithoutCancelled = tasks.filter((task) => task.status !== 'Cancelled').length;
+        if (totalWithoutCancelled === 0) {
+            setPercent(0);
+            return;
+        }
+        const completed = tasks.filter((task) => task.status === 'Completed').length;
+        let progress = (completed / totalWithoutCancelled) * 100;
+        progress = Math.round(progress)
+        setPercent(progress);
+    }
+
+    const returnTasksData = () => {
+        const totalWithoutCancelled = tasks.filter((task) => task.status !== 'Cancelled').length;
+        const completed = tasks.filter((task) => task.status === 'Completed').length;
+        const cancelled = tasks.filter((task) => task.status === 'Cancelled').length;
+        return [completed, totalWithoutCancelled, cancelled];
+    }
+
     useEffect(() => {
         fetchProjectData();
         fetchTasks();
     }, [token])
 
     useEffect(() => {
-       if (show || taskShow){
+       if (show || taskShow || deleteShow){
             document.scrollingElement.scrollTop = 0;
             document.body.style.overflow = 'hidden';
         }
        else {
            document.body.style.overflow = 'auto';
        }
+       calculateProgress();
     })
 
 
@@ -125,8 +154,9 @@ export default function ProjectDetail() {
                 <div className="project-container">
                     <div className="small-container">
                         <p className="small-detail-heading">Details</p>
-                        <div className="edit-button-container" onClick={() => setShow(true)}>
-                            <GoPencil />
+                        <div className="edit-button-container">
+                            <GoPencil  onClick={() => setShow(true)}/>
+                            <MdDeleteOutline onClick={() => setDeleteShow(true)}/>
                         </div>
                     </div>
                     <div className="project-info-container">
@@ -146,7 +176,8 @@ export default function ProjectDetail() {
                                 <CircularProgressbar value={percent} text={`${percent}%`} styles={buildStyles({pathColor: getDynamicColor()})} />
                             </div>
                             <div className="status-text-container">
-                                <h5 className="status-info">6/10 Tasks Completed</h5>
+                                <h5 className="status-info">{returnTasksData()[0]}/{returnTasksData()[1]} Tasks Completed</h5>
+                                <p className="status-info-desc">({returnTasksData()[2]} Tasks Cancelled)</p>
                                 <h5 className="status-text">{project.status}</h5>
                             </div>
                         </div>
@@ -188,9 +219,10 @@ export default function ProjectDetail() {
                 </div>
 
             </main>
-            <div className={taskShow===true?'modal-container show':'modal-container hide'}>
+            <div className={taskShow===true?'modal-container show':'modal-container hide'} onClick={hanldeClickOutside}>
                 <TaskModal setShow={setTaskShow} fetcher={fetchTasks} projectId={id}/>
             </div>
+            {deleteShow && <DeleteModal setShow={setDeleteShow} navigate={navigate} id={id} />}
             
             <Footer />
         </div>

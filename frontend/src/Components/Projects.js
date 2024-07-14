@@ -26,6 +26,13 @@ export default function Projects() {
             console.log(err);
         })
     }
+
+    const hanldeClickOutside = (e) => {
+        if (e.target === e.currentTarget) {
+          setShow(false);
+        }
+    };
+
     
     useEffect(() => {
         handleFetchProjects();
@@ -45,7 +52,7 @@ export default function Projects() {
                 <div className="button-justifier">
                     <button className="gray-button" onClick={() => setShow(true)}>Add Project</button>
                 </div>
-                <div className={show===true?'modal-container show':'modal-container hide'}>
+                <div className={show===true?'modal-container show':'modal-container hide'} onClick={hanldeClickOutside}>
                     <ProjectModal setShow={setShow} fetcher={handleFetchProjects}/>
                 </div>
                 <table className="proj-table" border={1}>
