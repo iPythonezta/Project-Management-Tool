@@ -69,6 +69,7 @@ export default function TaskModal({ setShow, fetcher, title, description, start,
             start_date: startDate,
             end_date: endDate,
             status: status,
+            project_id: projectId,
         };
 
         axios.put(`http://127.0.0.1:8000/api/tasks/${id}/`, task, {

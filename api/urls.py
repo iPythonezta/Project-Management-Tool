@@ -14,4 +14,6 @@ urlpatterns = [
     ####################################################
     path('tasks/',views.TasksListCreateView.as_view()),
     path('tasks/<int:pk>/',views.TasksUpdateDeleteView.as_view()),
+    ####################################################
+    path('instructions/',views.InstructionListCreateView.as_view()),
 ]

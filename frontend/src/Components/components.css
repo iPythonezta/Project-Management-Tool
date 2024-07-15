@@ -912,8 +912,8 @@ select > option {
 }
 
 .task-progress-indicator > * {
-    height: 120px;
-    width: 120px;
+    height: 100px;
+    width: 100px;
 }
 
 .task-actions-container {
@@ -966,4 +966,8 @@ select > option {
     font-family: "Archivo Black", sans-serif;
     font-weight: 400;
     font-style: normal;
+}
+
+.btn-container {
+    margin: 0 auto;
 }

@@ -48,3 +48,10 @@ class Tasks(models.Model):
     status = models.CharField(max_length=100)
     def __str__(self):
         return self.title
+
+class Instruction(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, to_field='email')
+    task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    message = models.TextField()
+    attachment = models.FileField(null=True, blank=True, upload_to='attachments/')
+    created_at = models.DateTimeField(auto_now_add=True)

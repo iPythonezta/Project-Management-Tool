@@ -1,12 +1,14 @@
 import axios, { all } from "axios";
 
 import { useState, useEffects, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProjectContext } from "../Context/ProjectContext";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import NotLoggedIn from "./NotLoggedIn";
+import DeleteModal from "./DeleteModal";
+import TaskModal from "./TasksModal";
 
 import { GoPencil } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
@@ -26,6 +28,9 @@ export default function TaskDetail () {
     const [task, setTask] = useState({});
     const [allTasks, setAllTasks] = useState([]);
     const [percent, setPercent] = useState(0);
+    const [show, setShow] = useState(false);
+    const [taskShow, setTaskShow] = useState(false);
+    const navigate = useNavigate();
 
     const fetchTasks = async (id) => {
         await axios.get(`http://127.0.0.1:8000/api/tasks/?project_id=${id}`, {
@@ -114,6 +119,17 @@ export default function TaskDetail () {
         })
     }
 
+    const hanldeClickOutside = (e) => {
+        if (e.target === e.currentTarget) {
+          setShow(false);
+          setTaskShow(false);
+        }
+    };
+
+    const handleTaskShow = () => {
+        setTaskShow(true);
+    }
+
     useEffect(() => {
         fetchTaskData();
     }, [token])
@@ -121,6 +137,16 @@ export default function TaskDetail () {
     useEffect(() => {
         calculateProgress();
     }, [allTasks])
+
+    useEffect(() => {
+        if (show || taskShow){
+            document.scrollingElement.scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+        }
+       else {
+           document.body.style.overflow = 'auto';
+       }
+    })
 
     if (!login) {
         return <NotLoggedIn />
@@ -138,8 +164,8 @@ export default function TaskDetail () {
                         <div className="small-container">
                             <p className="small-detail-heading">Details</p>
                             <div className="edit-button-container">
-                                <GoPencil  />
-                                <MdDeleteOutline />
+                                <GoPencil  onClick={handleTaskShow}/>
+                                <MdDeleteOutline onClick={() => setShow(true)} />
                             </div>
                         </div>
                         <div className="task-info-container">
@@ -160,7 +186,7 @@ export default function TaskDetail () {
                                         task.status === 'In Progress' ? <MdTimeline className="status-icon" style={{color: '#8b8500' }} /> : 
                                         task.status === 'Delayed' ? <MdOutlineAccessTime className="status-icon" style={{color: '#805e80'}} /> : 
                                         task.status === 'Cancelled' ? <MdOutlineCancel className="status-icon" style={{color: '#97002b'}} /> : 
-                                        task.status === 'Not Yet Started' ? <GiPauseButton className="status-icon" style={{color: '#32c5c5'}} /> : null
+                                        task.status === 'Pending' ? <GiPauseButton className="status-icon" style={{color: '#32c5c5'}} /> : null
                                     }
                                 </div>
                                 <div className="status-text-container">
@@ -170,7 +196,7 @@ export default function TaskDetail () {
                                             task.status === 'In Progress' ? {color: '#8b8500', opacity:0.5} :
                                             task.status === 'Delayed' ? {color: '#805e80', opacity:0.5} : 
                                             task.status === 'Cancelled' ? {color: '#97002b', opacity:0.5} : 
-                                            task.status === 'Not Yet Started' ? {color: '#32c5c5', opacity:0.5} : null
+                                            task.status === 'Pending' ? {color: '#32c5c5', opacity:0.5} : null
                                         }
                                     >{task.status}</h5>
                                 </div>
@@ -179,10 +205,13 @@ export default function TaskDetail () {
                     </div>
                     <div className="task-actions-container">
                         {task.status !== 'In Progress' && <button className="progress-btn" onClick={() => markAs('In Progress')}><RiCheckDoubleLine /> Mark as Active</button>}
-                        {task.status !== 'Not Yet Started' && <button className="not-started-btn" onClick={() => markAs('Not Yet Started')}><RiCheckDoubleLine /> Mark as Not Started</button>}
+                        {task.status !== 'Pending' && <button className="not-started-btn" onClick={() => markAs('Pending')}><RiCheckDoubleLine /> Mark as Not Started</button>}
                         {task.status !== 'Cancelled' && <button className="cancel-btn" onClick={() => markAs('Cancelled')}><RiCheckDoubleLine /> Mark as Cancelled</button>}
                         {task.status !== 'Delayed' && <button className="delay-btn" onClick={() => markAs('Delayed')}><RiCheckDoubleLine /> Mark as Delayed</button>}
                         {task.status !== 'Completed' && <button className="completed-btn" onClick={() => markAs('Completed')}><RiCheckDoubleLine /> Mark As Completed</button>}
+                    </div>
+                    <div className="task-instructions-container">
+                        <h2 className="pg-heading">Task Instructions</h2>
                     </div>
                 </div>
                 <aside className="proj-sidebar">
@@ -200,6 +229,26 @@ export default function TaskDetail () {
                 </aside>
             </div>
             <Footer />
+            <div className="modal-section">
+                <div className={taskShow===true?'modal-container show':'modal-container hide'} onClick={hanldeClickOutside}>
+                    <TaskModal
+                        title= {task?.title}
+                        description = {task?.description}
+                        start= {task?.start_date}
+                        end= {task?.end_date}
+                        status_= {task?.status}
+                        id= {task?.id}
+                        edit= {true}
+                        setShow={setTaskShow} 
+                        fetcher={()=> {
+                            fetchTaskData();
+                            fetchTasks();
+                        }} 
+                        projectId={task?.project?.id}
+                    />
+                </div>
+                {show && <DeleteModal setShow={setShow} id={task.id} task={true} navigate={navigate} projId={task.project.id}/>}
+            </div>
         </div>
     )
 }

@@ -2,11 +2,22 @@ import React from "react";
 import { useProjectContext } from "../Context/ProjectContext";
 import axios from "axios";
 
-export default function DeleteModal({ setShow, navigate, id, task })  {
+export default function DeleteModal({ setShow, navigate, id, task, projId })  {
     const {token} = useProjectContext();
     const handleDelete = async() => {
         if (task) {
-
+            await axios.delete(`http://127.0.0.1:8000/api/tasks/${id}/`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            .then((response) => {
+                console.log(response.data);
+                navigate(`/project/${projId}`);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
         }
         else {
             await axios.delete(`http://127.0.0.1:8000/api/projects/${id}/`, {
