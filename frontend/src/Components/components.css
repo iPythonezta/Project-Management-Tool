@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Odor+Mean+Chey&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 @keyframes gradientAnimation {
     0% {
         background-position: 0% 50%;
@@ -908,4 +909,61 @@ select > option {
 
 .task-footer {
     justify-content: space-around;
+}
+
+.task-progress-indicator > * {
+    height: 120px;
+    width: 120px;
+}
+
+.task-actions-container {
+    display: flex;
+    margin: 10px auto;
+    width: 70%;
+    justify-content: center;
+}
+
+.task-actions-container > * {
+    height: 50px;
+    width: 200px;
+    font-size: 15px;
+    border: 0px;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.task-actions-container > *:hover {
+    opacity: 1;
+}
+
+.progress-btn {
+    background-color: transparent;
+    color: #8b8500;
+}
+
+.completed-btn {
+    background-color: transparent;
+    color: #006400;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    color: #97002b;
+}
+
+.not-started-btn {
+    background-color: transparent;
+    color: #037474;
+}
+
+.delay-btn {
+    background-color: transparent;
+    color: #7d247d;
+}
+
+.task-status-text {
+    font-family: "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }

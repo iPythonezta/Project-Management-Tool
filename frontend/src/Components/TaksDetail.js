@@ -10,6 +10,12 @@ import NotLoggedIn from "./NotLoggedIn";
 
 import { GoPencil } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { MdOutlineAccessTime } from "react-icons/md";
+import { MdTimeline } from "react-icons/md";
+import { MdOutlineCancel } from "react-icons/md";
+import { GiPauseButton } from "react-icons/gi";
+import { RiCheckDoubleLine } from "react-icons/ri";
 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -91,9 +97,25 @@ export default function TaskDetail () {
 
     }
 
+    const markAs  = async(mark) => {
+        await axios.patch(`http://127.0.0.1:8000/api/tasks/${id}/`, {
+            status: mark
+        }, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        })
+        .then(res => {
+            console.log(res.data);
+            fetchTaskData();
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
     useEffect(() => {
         fetchTaskData();
-        fetchTasks();
     }, [token])
 
     useEffect(() => {
@@ -131,9 +153,36 @@ export default function TaskDetail () {
                             </div>
 
                             <div className="status-container">
-                                
+                                <h3 className="project-title status-hd">Status</h3>
+                                <div className="task-progress-indicator">
+                                    {
+                                        task.status === 'Completed' ? <FaCheck className="status-icon" style={{color: '#006400' }} /> : 
+                                        task.status === 'In Progress' ? <MdTimeline className="status-icon" style={{color: '#8b8500' }} /> : 
+                                        task.status === 'Delayed' ? <MdOutlineAccessTime className="status-icon" style={{color: '#805e80'}} /> : 
+                                        task.status === 'Cancelled' ? <MdOutlineCancel className="status-icon" style={{color: '#97002b'}} /> : 
+                                        task.status === 'Not Yet Started' ? <GiPauseButton className="status-icon" style={{color: '#32c5c5'}} /> : null
+                                    }
+                                </div>
+                                <div className="status-text-container">
+                                    <h5 className="task-status-text status-text"
+                                        style={
+                                            task.status === 'Completed' ? {color: '#006400', opacity:0.5} :
+                                            task.status === 'In Progress' ? {color: '#8b8500', opacity:0.5} :
+                                            task.status === 'Delayed' ? {color: '#805e80', opacity:0.5} : 
+                                            task.status === 'Cancelled' ? {color: '#97002b', opacity:0.5} : 
+                                            task.status === 'Not Yet Started' ? {color: '#32c5c5', opacity:0.5} : null
+                                        }
+                                    >{task.status}</h5>
+                                </div>
                             </div>
+                        </div>
                     </div>
+                    <div className="task-actions-container">
+                        {task.status !== 'In Progress' && <button className="progress-btn" onClick={() => markAs('In Progress')}><RiCheckDoubleLine /> Mark as Active</button>}
+                        {task.status !== 'Not Yet Started' && <button className="not-started-btn" onClick={() => markAs('Not Yet Started')}><RiCheckDoubleLine /> Mark as Not Started</button>}
+                        {task.status !== 'Cancelled' && <button className="cancel-btn" onClick={() => markAs('Cancelled')}><RiCheckDoubleLine /> Mark as Cancelled</button>}
+                        {task.status !== 'Delayed' && <button className="delay-btn" onClick={() => markAs('Delayed')}><RiCheckDoubleLine /> Mark as Delayed</button>}
+                        {task.status !== 'Completed' && <button className="completed-btn" onClick={() => markAs('Completed')}><RiCheckDoubleLine /> Mark As Completed</button>}
                     </div>
                 </div>
                 <aside className="proj-sidebar">
