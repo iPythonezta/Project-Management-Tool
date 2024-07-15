@@ -9,6 +9,7 @@ import { useProjectContext } from './Context/ProjectContext';
 import axios from 'axios';
 import Tasks from './Components/Tasks';
 import ProjectDetail from './Components/ProjectDetail';
+import TaskDetail from './Components/TaksDetail';
 
 function App() {
   const {setUser, setLogin, setToken} = useProjectContext();
@@ -41,6 +42,7 @@ function App() {
         <Route path='/projects' element={<Projects />} />
         <Route path='/tasks' element={<Tasks />} />
         <Route path='/project/:id' element={<ProjectDetail />} />
+        <Route path='/task/:id' element={<TaskDetail />} />
       </Routes>
     </BrowserRouter>
   );

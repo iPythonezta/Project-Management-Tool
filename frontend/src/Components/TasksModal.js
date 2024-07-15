@@ -32,8 +32,9 @@ export default function TaskModal({ setShow, fetcher, title, description, start,
 
     const handleAddTask = (e) => {
         e.preventDefault();
+        console.log(projectId)
         const task = {
-            project: projectId,
+            project_id: projectId,
             title: taskTitle,
             description: taskDescription,
             start_date: startDate,

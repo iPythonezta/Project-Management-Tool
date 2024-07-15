@@ -11,9 +11,10 @@ import ProjectModal from "./ProjectModal";
 import TaskModal from "./TasksModal";
 import { MdDeleteOutline } from "react-icons/md";
 import DeleteModal from "./DeleteModal";
+import NotLoggedIn from "./NotLoggedIn";
 export default function ProjectDetail() {
     let {id} = useParams();
-    const {token} = useProjectContext();
+    const {token, login} = useProjectContext();
     const [project, setProject] = React.useState({});
     const [percent, setPercent] = React.useState(0);
     const [show, setShow] = React.useState(false);
@@ -132,6 +133,10 @@ export default function ProjectDetail() {
        calculateProgress();
     })
 
+    if (!login) {
+        return <NotLoggedIn />
+    }
+
 
     return(
         <div className="project-details-container page-container">
@@ -203,7 +208,7 @@ export default function ProjectDetail() {
                             <tbody>
                                 {
                                     tasks.map((task) => (
-                                        <tr key={task.id} className={getClassName(task.status)}>
+                                        <tr key={task.id} className={getClassName(task.status)} onClick={() => navigate(`/task/${task.id}`)}>
                                             <td colSpan={1}>{task.id}</td>
                                             <td colSpan={2}>{task.title}</td>
                                             <td colSpan={3}>{task.description}</td>

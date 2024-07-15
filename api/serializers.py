@@ -21,7 +21,8 @@ class ProjectsSerializer(serializers.ModelSerializer):
         return project
     
 class TasksSerializer(serializers.ModelSerializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all())
+    project = ProjectsSerializer(read_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(), source='project')
     class Meta:
         model = Tasks
         fields = '__all__'
