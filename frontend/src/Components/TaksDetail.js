@@ -18,6 +18,9 @@ import { MdTimeline } from "react-icons/md";
 import { MdOutlineCancel } from "react-icons/md";
 import { GiPauseButton } from "react-icons/gi";
 import { RiCheckDoubleLine } from "react-icons/ri";
+import { AiOutlineSend } from 'react-icons/ai';
+import { MdAttachFile } from 'react-icons/md';
+import { FaFile } from "react-icons/fa";
 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -30,6 +33,8 @@ export default function TaskDetail () {
     const [percent, setPercent] = useState(0);
     const [show, setShow] = useState(false);
     const [taskShow, setTaskShow] = useState(false);
+    const [inputMessage, setInputMessage] = useState('');
+    const [file, setFile] = useState(null);
     const navigate = useNavigate();
 
     const fetchTasks = async (id) => {
@@ -130,6 +135,8 @@ export default function TaskDetail () {
         setTaskShow(true);
     }
 
+    const handleSendMessage = async() => {}
+
     useEffect(() => {
         fetchTaskData();
     }, [token])
@@ -211,7 +218,62 @@ export default function TaskDetail () {
                         {task.status !== 'Completed' && <button className="completed-btn" onClick={() => markAs('Completed')}><RiCheckDoubleLine /> Mark As Completed</button>}
                     </div>
                     <div className="task-instructions-container">
-                        <h2 className="pg-heading">Task Instructions</h2>
+                        <h2 className="pg-heading">Task Discussion</h2>
+                        <div className="chat-container">
+                            <div className="messages-container">
+                                <div className="message">
+                                    <div className="message-header">
+                                        Huzaifa
+                                    </div>
+                                    <p>
+                                        Please view the instructions in the attached file
+                                    </p>
+                                    <div className="attachment">
+                                        <a href="#" className="attachment-link">View Attachment</a>
+                                    </div>
+                                    <span className="timestamp">2024-07-01 3:45pm </span>
+                                </div>
+                                <div className="message message-received">
+                                    <div className="message-header">
+                                        Huzaifa
+                                    </div>
+                                    <p>
+                                        Please view the instructions in the attached file
+                                    </p>
+                                    <span className="timestamp">2024-07-01 3:45pm </span>
+                                </div>
+                            </div>
+                            <div className="message-input-container">
+                                <textarea 
+                                    value={inputMessage} 
+                                    onChange={(e) => setInputMessage(e.target.value)} 
+                                />
+                                <label htmlFor="file-input">
+                                    <MdAttachFile className="attach-icon" />
+                                </label>
+                                <input 
+                                    id="file-input" 
+                                    type="file" 
+                                    style={{ display: 'none' }} 
+                                    onChange={(e) => {
+                                        console.log(e.target.files[0]);
+                                        setFile(e.target.files[0])
+                                    }} 
+                                />
+                                <button className="send-button" onClick={handleSendMessage}>
+                                    <AiOutlineSend />
+                                </button>
+                            </div>
+                            {file && (
+                                <div className="attached-file">
+                                    <span className="remove-file" onClick={() => setFile(null)}>×</span>
+                                    <FaFile className="file-icon" />
+                                    <div className="file-name-container">
+                                        <span className="file-name">{file.name}</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <aside className="proj-sidebar">
