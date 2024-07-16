@@ -27,7 +27,7 @@ import 'react-circular-progressbar/dist/styles.css';
 
 export default function TaskDetail () {
     const {id} = useParams();
-    const {token, login} = useProjectContext();
+    const {token, login, user} = useProjectContext();
     const [task, setTask] = useState({});
     const [allTasks, setAllTasks] = useState([]);
     const [percent, setPercent] = useState(0);
@@ -35,6 +35,7 @@ export default function TaskDetail () {
     const [taskShow, setTaskShow] = useState(false);
     const [inputMessage, setInputMessage] = useState('');
     const [file, setFile] = useState(null);
+    const [instructions , setInstructions] = useState([]);
     const navigate = useNavigate();
 
     const fetchTasks = async (id) => {
@@ -135,10 +136,47 @@ export default function TaskDetail () {
         setTaskShow(true);
     }
 
-    const handleSendMessage = async() => {}
+    const handleSendMessage = async() => {
+        const formData = new FormData();
+        formData.append('message', inputMessage);
+        if (file) {
+            formData.append('attachment', file);
+        }
+        formData.append('user', user.email);
+        formData.append('task_id', task.id);
+        await axios.post(`http://127.0.0.1:8000/api/instructions/`, formData, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        })
+        .then(res => {
+            console.log(res.data);
+            setInputMessage('');
+            setFile(null);
+            fetchTaskData();
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
+    const fetchInstructions = async() => {
+        await axios.get(`http://127.0.0.1:8000/api/instructions/?task_id=${id}`, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        })
+        .then(res => {
+            setInstructions(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     useEffect(() => {
         fetchTaskData();
+        fetchInstructions();    
     }, [token])
 
     useEffect(() => {
@@ -153,6 +191,7 @@ export default function TaskDetail () {
        else {
            document.body.style.overflow = 'auto';
        }
+       fetchInstructions();
     })
 
     if (!login) {
@@ -221,27 +260,26 @@ export default function TaskDetail () {
                         <h2 className="pg-heading">Task Discussion</h2>
                         <div className="chat-container">
                             <div className="messages-container">
-                                <div className="message">
-                                    <div className="message-header">
-                                        Huzaifa
-                                    </div>
-                                    <p>
-                                        Please view the instructions in the attached file
-                                    </p>
-                                    <div className="attachment">
-                                        <a href="#" className="attachment-link">View Attachment</a>
-                                    </div>
-                                    <span className="timestamp">2024-07-01 3:45pm </span>
-                                </div>
-                                <div className="message message-received">
-                                    <div className="message-header">
-                                        Huzaifa
-                                    </div>
-                                    <p>
-                                        Please view the instructions in the attached file
-                                    </p>
-                                    <span className="timestamp">2024-07-01 3:45pm </span>
-                                </div>
+                                {
+                                    instructions.map((instruction, index) => (
+                                        <div className={instructions.user === user.email ? "message" : "message message-received"} key={index}>
+                                            <div className="message-header">
+                                                {instruction.user_details.first_name} {instruction.user_details.last_name}
+                                            </div>
+                                            <p>
+                                                {instruction.message}
+                                            </p>
+                                            <div className="attachment-container">
+                                                {instruction.attachment && (
+                                                    <div className="attachment">
+                                                        <a href={instruction.attachment} download>View Attachment</a>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <span className="timestamp">{new Date(instruction.created_at).toDateString() + " " + new Date(instruction.created_at).toLocaleTimeString()}</span>
+                                        </div>
+                                    ))
+                                }
                             </div>
                             <div className="message-input-container">
                                 <textarea 

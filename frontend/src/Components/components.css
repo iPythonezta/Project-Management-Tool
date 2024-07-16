@@ -986,7 +986,7 @@ select > option {
 }
 
 .messages-container {
-    max-height: 300px;
+    height: fit-content;
     overflow-y: auto;
 }
 

@@ -30,10 +30,12 @@ class TasksSerializer(serializers.ModelSerializer):
 class InstructionSerializer(serializers.ModelSerializer):
     task = TasksSerializer(read_only=True)
     task_id = serializers.PrimaryKeyRelatedField(queryset=Tasks.objects.all(), source='task')
-    user = serializers.EmailField()
+    user = serializers.EmailField(write_only=True)
+    user_details = UserSerializer(read_only=True, source='user')
+    attachment = serializers.FileField(required=False)
     class Meta:
         model = Instruction
-        fields = '__all__'
+        fields = ['id', 'user', 'user_details', 'task', 'task_id', 'message', 'attachment', 'created_at']
     def create(self, validated_data):
         user_email = validated_data.pop('user')
         user = CustomUser.objects.get(email=user_email)

@@ -136,3 +136,6 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_URL = '/media/'
