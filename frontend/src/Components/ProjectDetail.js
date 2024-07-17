@@ -13,6 +13,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import DeleteModal from "./DeleteModal";
 import NotLoggedIn from "./NotLoggedIn";
 import ProjectDetailSwitch from "./ProjectDetailSwitch";
+import InviteModal from "./InviteModal";
 export default function ProjectDetail() {
     let {id} = useParams();
     const {token, login} = useProjectContext();
@@ -23,6 +24,7 @@ export default function ProjectDetail() {
     const [taskShow, setTaskShow] = React.useState(false);
     const [deleteShow, setDeleteShow] = React.useState(false);
     const [showMembers, setShowMembers] = React.useState(false);
+    const [inviteShow, setInviteShow] = React.useState(false);
     const navigate = useNavigate();
 
     const fetchProjectData = async() => {
@@ -155,6 +157,9 @@ export default function ProjectDetail() {
                     edit={true}
                     id={project.id}
                 />
+            </div>
+            <div className={inviteShow===true?'modal-container show':'modal-container hide'}>
+                <InviteModal />
             </div>
             
             <main className="container">

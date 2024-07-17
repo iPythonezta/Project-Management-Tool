@@ -458,32 +458,32 @@ body {
     transition: opacity 0.1, visibility 0.1s;
 }
 
-.proj-modal, .task-modal {
+.proj-modal, .task-modal, .invite-modal {
     width: 50%;
     margin: 20px auto;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 15px 15px;
 }
 
-.proj-modal-header, .task-modal-header {
+.proj-modal-header, .task-modal-header, .invite-modal-header {
     background-color: rgb(255, 199, 126);
     border: 1px solid black;
     border-radius: 25px 25px 0 0;
 }
 
-.proj-modal-header h2, .task-modal-header h2 {
+.proj-modal-header h2, .task-modal-header h2, .invite-modal-header h2 {
     width: 100%;
     display: inline-block;
     text-align: center;
     margin-top: -30px;
 }
 
-.proj-modal-body, .task-modal-body {
+.proj-modal-body, .task-modal-body, .invite-modal-body {
     border: 1px solid black;
     height: 500px;
     overflow-y: scroll;
 }
 
-.proj-modal-footer, .task-modal-footer {
+.proj-modal-footer, .task-modal-footer, .invite-modal-footer {
     border: 1px solid black;
     background-color: rgb(255, 199, 126);
     height: 60px;
@@ -508,7 +508,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.20);
 }
 
-.proj-modal-body, .task-modal-body {
+.proj-modal-body, .task-modal-body, .invite-modal-body {
     background-color: white;
 }
 
@@ -1143,4 +1143,8 @@ select > option {
 .member-heading {
     margin: 30px;
     margin-top: 50px;
+}
+
+.invite-modal-body {
+    height: 150px;
 }
