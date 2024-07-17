@@ -1097,3 +1097,37 @@ select > option {
     margin-bottom: -10px;
     cursor: pointer;
 }
+
+.project-manager-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-manager-name {
+    font-size: 22px;
+    margin-top: 0px;
+    font-style: italic;
+    color: #464646;
+}
+
+.name {
+    font-weight: 700;
+}
+
+.project-manager-email {
+    font-size: 16px;
+    margin-top: -10px;
+    font-style: italic;
+    color: #464646;
+}
+
+.project-manager-email a {
+    text-decoration: none;
+    color: #464646;
+}
+
+.project-manager-email a:hover {
+    color: #000000;
+}

@@ -156,6 +156,19 @@ export default function ProjectDetail() {
             </div>
             <main className="container">
                 <h2 className="pg-heading">{project.title}</h2>
+                <p className="project-manager-details">
+                    <p className="project-manager-name">
+                        Project Manager:&nbsp;&nbsp;&nbsp;
+                        <span className="name">
+                            {project.manager_details?.first_name} {project.manager_details?.last_name}
+                        </span>
+                    </p>
+                    <p className="project-manager-email">
+                        <a href={`mailto:${project.manager_details?.email}`}>
+                            ({project.manager_details?.email})
+                        </a>
+                    </p>
+                </p>
                 <div className="project-container">
                     <div className="small-container">
                         <p className="small-detail-heading">Details</p>
