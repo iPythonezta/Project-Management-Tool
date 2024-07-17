@@ -1131,3 +1131,16 @@ select > option {
 .project-manager-email a:hover {
     color: #000000;
 }
+
+.member-table tr td, .member-table tr th {
+    padding: 15px;    
+}
+
+.member-table tr td {
+    background-color: #dbbc93;
+}
+
+.member-heading {
+    margin: 30px;
+    margin-top: 50px;
+}

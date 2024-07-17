@@ -12,6 +12,7 @@ import TaskModal from "./TasksModal";
 import { MdDeleteOutline } from "react-icons/md";
 import DeleteModal from "./DeleteModal";
 import NotLoggedIn from "./NotLoggedIn";
+import ProjectDetailSwitch from "./ProjectDetailSwitch";
 export default function ProjectDetail() {
     let {id} = useParams();
     const {token, login} = useProjectContext();
@@ -21,6 +22,7 @@ export default function ProjectDetail() {
     const [tasks, setTasks] = React.useState([]);
     const [taskShow, setTaskShow] = React.useState(false);
     const [deleteShow, setDeleteShow] = React.useState(false);
+    const [showMembers, setShowMembers] = React.useState(false);
     const navigate = useNavigate();
 
     const fetchProjectData = async() => {
@@ -154,6 +156,7 @@ export default function ProjectDetail() {
                     id={project.id}
                 />
             </div>
+            
             <main className="container">
                 <h2 className="pg-heading">{project.title}</h2>
                 <p className="project-manager-details">
@@ -169,73 +172,109 @@ export default function ProjectDetail() {
                         </a>
                     </p>
                 </p>
-                <div className="project-container">
-                    <div className="small-container">
-                        <p className="small-detail-heading">Details</p>
-                        <div className="edit-button-container">
-                            <GoPencil  onClick={() => setShow(true)}/>
-                            <MdDeleteOutline onClick={() => setDeleteShow(true)}/>
-                        </div>
-                    </div>
-                    <div className="project-info-container">
-                        <div className="project-info">
-                            <h3 className="project-title proj-hd">{project.title}</h3>
-                            <p className="project-description">{project.description}</p>
-                            <div className="proj-footer">
-                                <p><strong>Started At: </strong>{project.start_date}</p>
-                                <p><strong>End Date: </strong>{project.end_date}</p>
-                                <p><strong>Created At: </strong>{new Date(project.created_at).toDateString()}</p>
-                            </div>
-                        </div>
+                <ProjectDetailSwitch showMembers={showMembers} setShowMembers={setShowMembers} />
+                {showMembers === false ? 
+                    (    
+                        <div>
+                            <div className="project-container">
+                                <div className="small-container">
+                                    <p className="small-detail-heading">Details</p>
+                                    <div className="edit-button-container">
+                                        <GoPencil  onClick={() => setShow(true)}/>
+                                        <MdDeleteOutline onClick={() => setDeleteShow(true)}/>
+                                    </div>
+                                </div>
+                                <div className="project-info-container">
+                                    <div className="project-info">
+                                        <h3 className="project-title proj-hd">{project.title}</h3>
+                                        <p className="project-description">{project.description}</p>
+                                        <div className="proj-footer">
+                                            <p><strong>Started At: </strong>{project.start_date}</p>
+                                            <p><strong>End Date: </strong>{project.end_date}</p>
+                                            <p><strong>Created At: </strong>{new Date(project.created_at).toDateString()}</p>
+                                        </div>
+                                    </div>
 
-                        <div className="status-container">
-                            <h3 className="project-title status-hd">Status</h3>
-                            <div className="circular-progress-bar">
-                                <CircularProgressbar value={percent} text={`${percent}%`} styles={buildStyles({pathColor: getDynamicColor()})} />
+                                    <div className="status-container">
+                                        <h3 className="project-title status-hd">Status</h3>
+                                        <div className="circular-progress-bar">
+                                            <CircularProgressbar value={percent} text={`${percent}%`} styles={buildStyles({pathColor: getDynamicColor()})} />
+                                        </div>
+                                        <div className="status-text-container">
+                                            <h5 className="status-info">{returnTasksData()[0]}/{returnTasksData()[1]} Tasks Completed</h5>
+                                            <p className="status-info-desc">({returnTasksData()[2]} Tasks Cancelled)</p>
+                                            <h5 className="status-text">{project.status}</h5>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="status-text-container">
-                                <h5 className="status-info">{returnTasksData()[0]}/{returnTasksData()[1]} Tasks Completed</h5>
-                                <p className="status-info-desc">({returnTasksData()[2]} Tasks Cancelled)</p>
-                                <h5 className="status-text">{project.status}</h5>
+                            <h2 className="pg-heading">Project Tasks</h2>
+                            <div className="task-container">
+                                <div className="btn-container">
+                                    <button className="task-btn gray-button" onClick={()=>setTaskShow(true)}>Add Task</button>
+                                </div>
+                                <div className="task-table-container">
+                                    <table className="task-table">
+                                        <thead>
+                                            <tr>
+                                                <th colSpan={1}>ID</th>
+                                                <th colSpan={2}>Task Title</th>
+                                                <th colSpan={3}>Task Description</th>
+                                                <th colSpan={2}>Start Date</th>
+                                                <th colSpan={2}>End Date</th>
+                                                <th colSpan={2}>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                tasks.map((task) => (
+                                                    <tr key={task.id} className={getClassName(task.status)} onClick={() => navigate(`/task/${task.id}`)}>
+                                                        <td colSpan={1}>{task.id}</td>
+                                                        <td colSpan={2}>{task.title}</td>
+                                                        <td colSpan={3}>{task.description}</td>
+                                                        <td colSpan={2}>{task.start_date}</td>
+                                                        <td colSpan={2}>{task.end_date}</td>
+                                                        <td colSpan={2}>{task.status}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <h2 className="pg-heading">Project Tasks</h2>
-                <div className="task-container">
-                    <div className="btn-container">
-                        <button className="task-btn gray-button" onClick={()=>setTaskShow(true)}>Add Task</button>
-                    </div>
-                    <div className="task-table-container">
-                        <table className="task-table">
-                            <thead>
-                                <tr>
-                                    <th colSpan={1}>ID</th>
-                                    <th colSpan={2}>Task Title</th>
-                                    <th colSpan={3}>Task Description</th>
-                                    <th colSpan={2}>Start Date</th>
-                                    <th colSpan={2}>End Date</th>
-                                    <th colSpan={2}>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tasks.map((task) => (
-                                        <tr key={task.id} className={getClassName(task.status)} onClick={() => navigate(`/task/${task.id}`)}>
-                                            <td colSpan={1}>{task.id}</td>
-                                            <td colSpan={2}>{task.title}</td>
-                                            <td colSpan={3}>{task.description}</td>
-                                            <td colSpan={2}>{task.start_date}</td>
-                                            <td colSpan={2}>{task.end_date}</td>
-                                            <td colSpan={2}>{task.status}</td>
+                        </div>    
+                    ):
+                    (
+                        <div>    
+                            <h2 className="member-heading pg-heading">Project Members</h2>
+                            <div className="btn-container">
+                                <button className="gray-button member-btn">Invite Member</button>
+                            </div>
+                            <div className="member-container task-table-container">
+                                <table className="member-table task-table">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan={2}>First Name</th>
+                                            <th colSpan={2}>Last Name</th>
+                                            <th colSpan={2}>Email</th>
                                         </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            project?.members_details?.map((member) => (
+                                                <tr key={member.id}>
+                                                    <td colSpan={2}>{member.first_name}</td>
+                                                    <td colSpan={2}>{member.last_name}</td>
+                                                    <td colSpan={2}>{member.email}</td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )
+                }
             </main>
             <div className={taskShow===true?'modal-container show':'modal-container hide'} onClick={hanldeClickOutside}>
                 <TaskModal setShow={setTaskShow} fetcher={fetchTasks} projectId={id}/>

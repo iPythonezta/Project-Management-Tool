@@ -11,7 +11,8 @@ class UserSerializer(ModelSerializer):
 class ProjectsSerializer(serializers.ModelSerializer):
     manager = serializers.EmailField()
     manager_details = UserSerializer(read_only=True, source='manager')
-    members = serializers.SlugRelatedField(slug_field='email', queryset=CustomUser.objects.all(), many=True)
+    members = serializers.SlugRelatedField(slug_field='email', queryset=CustomUser.objects.all(), many=True, write_only=True)
+    members_details = UserSerializer(read_only=True, many=True, source='members')
     class Meta:
         model = Projects
         fields = '__all__'

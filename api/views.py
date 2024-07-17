@@ -7,8 +7,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import UserSerializer, ProjectsSerializer, TasksSerializer, InstructionSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
-from .models import Projects, Tasks, Instruction
-
+from .models import Projects, Tasks, Instruction, CustomUser
+from django.core.mail import EmailMessage
 # Create your views here.
 
 @api_view(['POST'])
