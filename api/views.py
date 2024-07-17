@@ -48,16 +48,18 @@ class ProjectsListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Projects.objects.filter(manager=self.request.user)
+        return Projects.objects.filter(members__in=[self.request.user])
     
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         data['manager'] = request.user.email
+        data['members'] = [request.user.email]
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class ProjectDeleteUpdateView(generics.RetrieveUpdateDestroyAPIView):
@@ -65,7 +67,7 @@ class ProjectDeleteUpdateView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Projects.objects.filter(manager=self.request.user)
+        return Projects.objects.filter(members__in=[self.request.user])
 
     def update(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -89,11 +91,12 @@ class TasksListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         project_id = self.request.query_params.get('project_id')
         if project_id:
-            return Tasks.objects.filter(project=project_id)
+            return Tasks.objects.filter(project=project_id, project__members__in=[self.request.user])
         else:
             return []
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
+        data['assigned_to'] = []
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             self.perform_create(serializer)
@@ -107,7 +110,7 @@ class TasksUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Tasks.objects.filter(project__manager=self.request.user)
+        return Tasks.objects.filter(project__members__in=[self.request.user])
     
 class InstructionListCreateView(generics.ListCreateAPIView):
     serializer_class = InstructionSerializer

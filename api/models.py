@@ -36,6 +36,7 @@ class Projects(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    members = models.ManyToManyField(CustomUser, related_name='members', blank=True)
     def __str__(self):
         return self.title
     
@@ -46,6 +47,7 @@ class Tasks(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=100)
+    assigned_to = models.ManyToManyField(CustomUser, related_name='assigned_to', blank=True)
     def __str__(self):
         return self.title
 
