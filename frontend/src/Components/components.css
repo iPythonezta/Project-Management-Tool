@@ -1147,4 +1147,44 @@ select > option {
 
 .invite-modal-body {
     height: 150px;
+    overflow: hidden;
+}
+
+.alert-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+}
+
+.danger {
+    background-color: rgba(222, 111, 111, 0.5);
+}
+
+.success {
+    background-color: rgba(111, 222, 111, 0.5);
+}
+
+.alert-icon {
+    font-size: 20px;
+    margin-right: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+.none {
+    display: none;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

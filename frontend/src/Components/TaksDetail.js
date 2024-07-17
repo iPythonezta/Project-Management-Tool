@@ -199,7 +199,7 @@ export default function TaskDetail () {
     }
     return (
         <div className="page-container">
-            <Navbar />
+            <Navbar active={'Projects'} />
             <div className="container task-detail-container">
                 <div className="main-body">
                     <header>
@@ -262,7 +262,7 @@ export default function TaskDetail () {
                             <div className="messages-container">
                                 {
                                     instructions.map((instruction, index) => (
-                                        <div className={instructions.user === user.email ? "message" : "message message-received"} key={index}>
+                                        <div className={instruction.user_details.email === user.email ? "message" : "message message-received"} key={index}>
                                             <div className="message-header">
                                                 {instruction.user_details.first_name} {instruction.user_details.last_name}
                                             </div>

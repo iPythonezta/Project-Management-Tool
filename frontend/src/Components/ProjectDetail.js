@@ -14,6 +14,9 @@ import DeleteModal from "./DeleteModal";
 import NotLoggedIn from "./NotLoggedIn";
 import ProjectDetailSwitch from "./ProjectDetailSwitch";
 import InviteModal from "./InviteModal";
+import { IoMdClose } from "react-icons/io";
+import LoadingComponent from "./LoadingComponent";
+
 export default function ProjectDetail() {
     let {id} = useParams();
     const {token, login} = useProjectContext();
@@ -25,6 +28,9 @@ export default function ProjectDetail() {
     const [deleteShow, setDeleteShow] = React.useState(false);
     const [showMembers, setShowMembers] = React.useState(false);
     const [inviteShow, setInviteShow] = React.useState(false);
+    const [alert, setAlert] = React.useState('');
+    const [alertType, setAlertType] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate();
 
     const fetchProjectData = async() => {
@@ -99,6 +105,7 @@ export default function ProjectDetail() {
         if (e.target === e.currentTarget) {
           setShow(false);
           setTaskShow(false);
+          setInviteShow(false);
         }
     };
 
@@ -127,7 +134,7 @@ export default function ProjectDetail() {
     }, [token])
 
     useEffect(() => {
-       if (show || taskShow || deleteShow){
+       if (show || taskShow || deleteShow || inviteShow) {
             document.scrollingElement.scrollTop = 0;
             document.body.style.overflow = 'hidden';
         }
@@ -136,6 +143,14 @@ export default function ProjectDetail() {
        }
        calculateProgress();
     })
+    
+    if (loading) {
+        return (
+            <>
+                <LoadingComponent />
+            </>
+        )
+    }
 
     if (!login) {
         return <NotLoggedIn />
@@ -158,8 +173,15 @@ export default function ProjectDetail() {
                     id={project.id}
                 />
             </div>
-            <div className={inviteShow===true?'modal-container show':'modal-container hide'}>
-                <InviteModal />
+            <div className={inviteShow===true?'modal-container show':'modal-container hide'} onClick={hanldeClickOutside}>
+                <InviteModal 
+                    setShow={setInviteShow} 
+                    fetcher={fetchProjectData} 
+                    project_id={project?.id}
+                    setAlert={setAlert}
+                    setAlertType={setAlertType}
+                    setLoading={setLoading}
+                />
             </div>
             
             <main className="container">
@@ -177,6 +199,18 @@ export default function ProjectDetail() {
                         </a>
                     </p>
                 </p>
+                <div className={alertType==='success'?'alert-container success': alertType==='danger'?'alert-container danger':'none'}>
+                    <div className="alert-icon" onClick={() => {
+                            setAlertType('none');
+                            setAlert('');
+                        }}
+                    >
+                        <IoMdClose />
+                    </div>
+                    <div className="alert">
+                        {alert}
+                    </div>
+                </div>
                 <ProjectDetailSwitch showMembers={showMembers} setShowMembers={setShowMembers} />
                 {showMembers === false ? 
                     (    
@@ -253,7 +287,7 @@ export default function ProjectDetail() {
                         <div>    
                             <h2 className="member-heading pg-heading">Project Members</h2>
                             <div className="btn-container">
-                                <button className="gray-button member-btn">Invite Member</button>
+                                <button className="gray-button member-btn" onClick={() => setInviteShow(true)}>Invite Member</button>
                             </div>
                             <div className="member-container task-table-container">
                                 <table className="member-table task-table">
