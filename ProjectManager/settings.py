@@ -60,7 +60,7 @@ ROOT_URLCONF = 'ProjectManager.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,6 +148,7 @@ REST_FRAMEWORK = {
 
 MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/build/static')]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 587

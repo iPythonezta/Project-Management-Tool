@@ -6,13 +6,17 @@ import ProjectModal from "./ProjectModal";
 import axios from "axios";
 import NotLoggedIn from "./NotLoggedIn";
 import { useNavigate } from "react-router-dom";
+import LoadingComponent from "./LoadingComponent";
+
 export default function Projects() {
     const [show, setShow] = React.useState(false);
     const [projects, setProjects] = React.useState([]);
     const {token, login} = useProjectContext();
+    const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate();
     
     const handleFetchProjects = () =>{
+        setLoading(true);
         axios.get('http://127.0.0.1:8000/api/projects/',{
             headers: {
                 Authorization: `Token ${token}`
@@ -21,8 +25,10 @@ export default function Projects() {
         .then(res => {
             setProjects(res.data);
             console.log(res.data);
+            setLoading(false);
         })
         .catch(err => {
+            setLoading(false);
             console.log(err);
         })
     }

@@ -1,6 +1,6 @@
 import axios, { all } from "axios";
 
-import { useState, useEffects, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectContext } from "../Context/ProjectContext";
 
@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import NotLoggedIn from "./NotLoggedIn";
 import DeleteModal from "./DeleteModal";
 import TaskModal from "./TasksModal";
+import LoadingComponent from "./LoadingComponent";
 
 import { GoPencil } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
@@ -36,9 +37,13 @@ export default function TaskDetail () {
     const [inputMessage, setInputMessage] = useState('');
     const [file, setFile] = useState(null);
     const [instructions , setInstructions] = useState([]);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const scrollRef = useRef();
+    const websocketRef = useRef(null);
 
     const fetchTasks = async (id) => {
+        setLoading(true);
         await axios.get(`http://127.0.0.1:8000/api/tasks/?project_id=${id}`, {
             headers: {
                 Authorization: `Token ${token}`
@@ -46,14 +51,17 @@ export default function TaskDetail () {
         })
         .then((response)=>{ 
             setAllTasks(response.data)
+            setLoading(false);
         })
         .catch((error) => {
             console.error(error);
+            setLoading(false);
         }
         )
     }
 
     const fetchTaskData = async() => {
+        setLoading(true);
         await axios.get(`http://127.0.0.1:8000/api/tasks/${id}/`, {
             headers: {
                 Authorization: `Token ${token}`
@@ -63,9 +71,11 @@ export default function TaskDetail () {
             console.log(res.data);
             setTask(res.data);
             fetchTasks(res.data.project.id);
+            setLoading(false);
         })
         .catch(err => {
             console.log(err);
+            setLoading(false);
         })
     }
 
@@ -184,18 +194,31 @@ export default function TaskDetail () {
     }, [allTasks])
 
     useEffect(() => {
+        if (websocketRef.current) {
+            websocketRef.current.close();
+        }
+
         const webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${id}/`);
 
         webSocket.onopen = () => {
             console.log('Connected');
         }
 
+        websocketRef.current = webSocket;
+
         webSocket.onmessage = (msg) => {
-            const data = JSON.parse(msg);
-            console.log(data);
-            fetchInstructions();
+            console.log(msg);
+            const data = JSON.parse(msg.data);
+            console.log("Message:- ")
+            console.log(data.message);
+            setInstructions((prev) => [...prev, data.message]);
+            scrollRef.current.scrollIntoView({ behavior: 'smooth'});
         }
-    }, [])
+
+        return () => {
+            webSocket.close();
+        }
+    }, [id])
 
     useEffect(() => {
         if (show || taskShow){
@@ -210,6 +233,10 @@ export default function TaskDetail () {
 
     if (!login) {
         return <NotLoggedIn />
+    }
+
+    if (loading) {
+        return <LoadingComponent />
     }
     return (
         <div className="page-container">
@@ -295,7 +322,7 @@ export default function TaskDetail () {
                                     ))
                                 }
                             </div>
-                            <div className="message-input-container">
+                            <div className="message-input-container" style={{marginTop:'30px'}}>
                                 <textarea 
                                     value={inputMessage} 
                                     onChange={(e) => setInputMessage(e.target.value)} 
@@ -325,6 +352,7 @@ export default function TaskDetail () {
                                     </div>
                                 </div>
                             )}
+                            <div ref={scrollRef}></div>
                         </div>
                     </div>
                 </div>

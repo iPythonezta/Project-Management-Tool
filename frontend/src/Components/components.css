@@ -983,6 +983,22 @@ select > option {
     margin-top: 15px;
     background-color: #ffca84;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.chat-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background-color: #985100;
+    border-radius: 30px;
+    border: 1px solid black;
 }
 
 .messages-container {
