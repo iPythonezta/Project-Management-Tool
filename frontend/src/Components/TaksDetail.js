@@ -184,6 +184,20 @@ export default function TaskDetail () {
     }, [allTasks])
 
     useEffect(() => {
+        const webSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${id}/`);
+
+        webSocket.onopen = () => {
+            console.log('Connected');
+        }
+
+        webSocket.onmessage = (msg) => {
+            const data = JSON.parse(msg);
+            console.log(data);
+            fetchInstructions();
+        }
+    }, [])
+
+    useEffect(() => {
         if (show || taskShow){
             document.scrollingElement.scrollTop = 0;
             document.body.style.overflow = 'hidden';
@@ -192,7 +206,7 @@ export default function TaskDetail () {
            document.body.style.overflow = 'auto';
        }
        fetchInstructions();
-    })
+    },[])
 
     if (!login) {
         return <NotLoggedIn />

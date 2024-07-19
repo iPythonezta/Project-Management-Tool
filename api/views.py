@@ -13,6 +13,8 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignat
 from django.conf import settings
 from django.urls import reverse
 from rest_framework.decorators import authentication_classes, permission_classes
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 # Create your views here.
 
 @api_view(['POST'])
@@ -132,6 +134,14 @@ class InstructionListCreateView(generics.ListCreateAPIView):
         if serializer.is_valid():
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                'chat_{}'.format(serializer.data['task_id']),
+                {
+                    'type': 'chat.message',
+                    'message': serializer.data
+                }
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
